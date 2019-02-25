@@ -20,11 +20,11 @@ This image runs supervisord in the foreground which in turn runs nginx/php-fpm i
 
 ### Example standalone usage (available at http://localhost/)
 
-`docker run --rm -it -p80:80 -v ~/www:/www lslio/nginx-php-fpm`
+`docker run --rm -it -p8080:80 -v /var/www/blog:/www --name php xianzixiang/alpine-php-ng`
 
 ### Example usage with volume map and server name change (available at http://example.localhost/)
 
-`docker run --rm -it -v ~/www:/www -p 80:80 -e SERVER_NAME=example.localhost lslio/nginx-php-fpm`
+`docker run --rm -it -p8080:80 -v /var/www/blog:/www --name php -e SERVER_NAME=_ xianzixiang/alpine-php-ng`
 
 ### Example [Dockerfile](https://github.com/lsl/docker-nginx-php-fpm/blob/master/examples/Dockerfile.basic) usage
 
