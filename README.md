@@ -24,7 +24,7 @@ This image runs supervisord in the foreground which in turn runs nginx/php-fpm i
 
 ### Example usage with volume map and server name change (available at http://example.localhost/)
 
-`docker run --rm -it -p8080:80 -v /var/www/blog:/www --name php -e SERVER_NAME=_ xianzixiang/alpine-php-ng`
+`docker run --restart=always -it -p8080:80 -v /var/www/blog:/www --name php -e SERVER_NAME=_ xianzixiang/alpine-php-ng`
 
 ### Example [Dockerfile](https://github.com/lsl/docker-nginx-php-fpm/blob/master/examples/Dockerfile.basic) usage
 
