@@ -1,4 +1,4 @@
-FROM alpine:latest
+FROM xianzixiang/alpine
 
 # Create user
 RUN adduser -D -u 1000 -g 1000 -s /bin/sh www-data && \
@@ -22,39 +22,13 @@ RUN apk add --no-cache --update \
     chown -R www-data:www-data /var/lib/nginx && \
     chown -R www-data:www-data /var/tmp/nginx
 
-# Install PHP/FPM + Modules
-RUN apk add --no-cache --update \
-    php7 \
-    php7-apcu \
-    php7-bcmath \
-    php7-bz2 \
-    php7-cgi \
-    php7-ctype \
-    php7-curl \
-    php7-dom \
-    php7-fpm \
-    php7-ftp \
-    php7-gd \
-    php7-iconv \
-    php7-json \
-    php7-mbstring \
-    php7-oauth \
-    php7-opcache \
-    php7-openssl \
-    php7-pcntl \
-    php7-pdo \
-    php7-pdo_mysql \
-    php7-phar \
-    php7-redis \
-    php7-session \
-    php7-simplexml \
-    php7-tokenizer \
-    php7-xdebug \
-    php7-xml \
-    php7-xmlwriter \
-    php7-zip \
-    php7-zlib \
-    php7-zmq
+RUN apk add --no-cache python3 && \
+    python3 -m ensurepip && \
+    rm -r /usr/lib/python*/ensurepip && \
+    pip3 install --upgrade pip setuptools && \
+    if [ ! -e /usr/bin/pip ]; then ln -s pip3 /usr/bin/pip ; fi && \
+    if [[ ! -e /usr/bin/python ]]; then ln -sf /usr/bin/python3 /usr/bin/python; fi && \
+    rm -r /root/.cache
 
 # Runtime env vars are envstub'd into config during entrypoint
 ENV SERVER_NAME="localhost"
@@ -65,7 +39,6 @@ ENV SERVER_ROOT=/www
 # SERVER_ALIAS='www.example.com'
 
 COPY ./supervisord.conf /supervisord.conf
-COPY ./php-fpm-www.conf /etc/php7/php-fpm.d/www.conf
 COPY ./nginx.conf.template /nginx.conf.template
 COPY ./docker-entrypoint.sh /docker-entrypoint.sh
 
