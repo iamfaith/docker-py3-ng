@@ -1,0 +1,31 @@
+version: '3'
+services:
+  app:
+    image: xianzixiang/py3_ng
+    volumes:
+      - ./app_data:/www
+    depends_on:
+      - "redis_cluster"
+    container_name: "$PROJECT_NAME"
+    ports:
+      - 8080:80
+    entrypoint: ["tini", "--", "/docker-entrypoint.sh"]
+
+
+  redis_cluster:
+    image: xianzixiang/redis-cluster:3.2.12
+    hostname: redis-server
+#    extra_hosts:
+#      redis-server: 10.13.X.X
+    container_name: "$REDIS_NAME"
+    environment:
+      IP: '0.0.0.0'
+      SENTINEL: 'true'
+      STANDALONE: 'false'
+    ports:
+      - 7000:7000
+
+networks:
+  default:
+    external:
+      name: mysql-network
